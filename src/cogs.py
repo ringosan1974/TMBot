@@ -10,7 +10,7 @@ class NoticeComingVC(commands.Cog):
         if member.voice is not None:
             vc = member.voice.channel
             channel = member.guild.system_channel
-            await channel.send(f'{member.name}さんが{vc}へ入室しました。')
+            await channel.send(f'{member.name if member.nick is None else member.nick}さんが{vc}へ入室しました。')
 
 def setup(bot):
     bot.add_cog(NoticeComingVC(bot))
