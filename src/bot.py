@@ -1,7 +1,6 @@
 import cogs_setup
 import disnake
 
-from botrun import run
 from disnake.ext import commands
 from var import TOKEN
 
