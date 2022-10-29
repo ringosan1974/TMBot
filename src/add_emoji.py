@@ -4,14 +4,6 @@ import msg_img
 
 from disnake.ext import commands
 
-def is_correct_name(self, name: str):
-    match = re.search(":.*:", name)
-    return False if match else True
-
-# return if image size is smaller than 2MB.
-def is_smaller_size(image: bytes):
-    return image.bit_length() < 21
-
 class AddEmoji(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -27,8 +19,8 @@ class AddEmoji(commands.Cog):
     async def add_emoji(self, inter: disnake.ApplicationCommandInteraction, name: str, url: str):
         guild = inter.guild
         image = await self.get_attachment(url)
-        if is_smaller_size(image) and is_correct_name(name):
-            await inter.response.send_message(f"画像を{name}としてemojiに追加します。")
+        try:
             await guild.create_custom_emoji(name=name, image=image)
-        else:
-            await inter.response.send_message("Error: 名前に':'を含まない、2MB以内の画像にしてください。")
+            await inter.response.send_message(f"画像を{name}としてemojiに追加します。")
+        except disnake.HTTPException:
+            await inter.response.send_message("<HTTPError.> 名前に':'を含まない、2MB以下の画像にしてください。それでも解決しない場合は開発者へご連絡ください。")
