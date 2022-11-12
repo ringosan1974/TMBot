@@ -1,2 +1,2 @@
 # TM BOT
-This is discord bot named TMBOT.
+THE TM BOT.
