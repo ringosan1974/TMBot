@@ -1,2 +1,2 @@
-# Thana&Mallow
-This is discord-bot named 'Thana&Mallow'.
+# TM BOT
+This is discord bot named TMBOT.
