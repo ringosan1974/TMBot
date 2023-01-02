@@ -5,7 +5,7 @@ import os
 
 from disnake.ext import commands
 from PIL import Image, ImageDraw, ImageFont
-from var import TRANSPARENT, BLACK, BACKGROUND, FONT
+from var import TRANSPARENT, BLACK, BACKGROUND, FONT, get_ids_from, images_alpha_composite
 
 
 class CreateMessageImage(commands.Cog):
@@ -15,7 +15,7 @@ class CreateMessageImage(commands.Cog):
 
     @commands.slash_command(name='msgimg', description='create image from message')
     async def messageimage(self, inter: disnake.ApplicationCommandInteraction, url: str):
-        ids = CreateMessageImage.get_ids_from(url)
+        ids = get_ids_from(url)
         channel = await self.bot.fetch_channel(ids[0])
         message = await channel.fetch_message(ids[1])
 
@@ -37,18 +37,5 @@ class CreateMessageImage(commands.Cog):
             drawtext = ImageDraw.Draw(text)
             drawtext.text((base.width//3, base.height//4), content, font=font, fill=BLACK)
             icon.paste(avatar, (10, 10))
-            image = CreateMessageImage.images_alpha_composite(base, icon, text)
+            image = images_alpha_composite(base, icon, text)
             return image
-
-    # get channel-id and message-id
-    @staticmethod
-    def get_ids_from(url: str):
-        pearsed_url = url.split('/')
-        return pearsed_url[-2:]  # message-id, channel-id
-
-    @staticmethod
-    def images_alpha_composite(*args):
-        result = Image.new('RGBA', args[0].size, TRANSPARENT)
-        for i in args:
-            result = Image.alpha_composite(result, i)
-        return result
