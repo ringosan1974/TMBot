@@ -16,8 +16,8 @@ class AddEmoji(commands.Cog):
         try:
             await inter.guild.create_custom_emoji(name=name, image=image)
             await inter.response.send_message(f"画像を{name}としてemojiに追加します。")
-        except disnake.HTTPException:
-            await inter.response.send_message("HTTPError.")
+        except disnake.HTTPException as e:
+            await inter.response.send_message(f"HTTPError: {e}")
 
     async def get_attachment(self, url: str):
         ids = get_ids_from(url)

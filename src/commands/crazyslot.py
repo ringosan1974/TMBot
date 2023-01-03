@@ -13,16 +13,19 @@ class CrazySlot(commands.Cog):
         self.bot = bot
 
     @commands.slash_command(options=[disnake.Option(name='all', type=disnake.OptionType.boolean, required=False)])
-    async def crazyslot(self, interaction: disnake.ApplicationCommandInteraction, all: bool=False):
-        word = ''
-        if all is True:
-            word += Words.CRAZYSLOT
-        word += 'ドゥルルルル...'
-        await interaction.response.send_message(word)
-        await asyncio.sleep(2)
-        kaito_words, value = CrazySlot._slot()
-        word = f'{word}{value}!!\nカイト「{kaito_words}」'
-        await interaction.edit_original_message(str(word))
+    async def crazyslot(self, inter: disnake.ApplicationCommandInteraction, all: bool=False):
+        try:
+            word = ''
+            if all is True:
+                word += Words.CRAZYSLOT
+            word += 'ドゥルルルル...'
+            await inter.response.send_message(word)
+            await asyncio.sleep(2)
+            kaito_words, value = CrazySlot._slot()
+            word = f'{word}{value}!!\nカイト「{kaito_words}」'
+            await inter.edit_original_message(str(word))
+        except disnake.HTTPException as e:
+            await inter.response.send_message(f"HTTPError: {e}")
 
     @staticmethod
     def _slot():

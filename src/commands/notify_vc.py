@@ -22,10 +22,13 @@ class NotifyVCState(commands.Cog):
             await member.guild.system_channel.send(f'{name}さんが離席解除しました。')
 
     async def _notify_connected(self, member, before, after):
-        name = NotifyVCState._get_user_name(member)
-        if after.channel is not None and before.channel is None:
-            vc = after.channel.name
-            await member.guild.system_channel.send(f'{name}さんが{vc}へ入室しました。')
-        if after.channel is None and before.channel is not None:
-            vc = before.channel.name
-            await member.guild.system_channel.send(f'{name}さんが{vc}から退出しました。')
+        try:
+            name = NotifyVCState._get_user_name(member)
+            if after.channel is not None and before.channel is None:
+                vc = after.channel.name
+                await member.guild.system_channel.send(f'{name}さんが{vc}へ入室しました。')
+            if after.channel is None and before.channel is not None:
+                vc = before.channel.name
+                await member.guild.system_channel.send(f'{name}さんが{vc}から退出しました。')
+        except disnake.HTTPException as e:
+            await member.guild.system_channl.send(f"HTTPError: {e}")

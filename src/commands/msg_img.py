@@ -15,17 +15,20 @@ class CreateMessageImage(commands.Cog):
 
     @commands.slash_command(name='msgimg', description='create image from message')
     async def messageimage(self, inter: disnake.ApplicationCommandInteraction, url: str):
-        ids = get_ids_from(url)
-        channel = await self.bot.fetch_channel(ids[0])
-        message = await channel.fetch_message(ids[1])
+        try:
+            ids = get_ids_from(url)
+            channel = await self.bot.fetch_channel(ids[0])
+            message = await channel.fetch_message(ids[1])
 
-        bytesicon = await message.author.avatar.read()
-        icon = Image.open(io.BytesIO(bytesicon))
-        image = self._create_msgimg(icon, message.content)
-        with io.BytesIO() as bytesimage:
-            image.save(bytesimage, format="PNG")
-            bytesimage.seek(0)
-            await inter.response.send_message(file=disnake.File(bytesimage, filename="file.png"))
+            bytesicon = await message.author.avatar.read()
+            icon = Image.open(io.BytesIO(bytesicon))
+            image = self._create_msgimg(icon, message.content)
+            with io.BytesIO() as bytesimage:
+                image.save(bytesimage, format="PNG")
+                bytesimage.seek(0)
+                await inter.response.send_message(file=disnake.File(bytesimage, filename="file.png"))
+        except disnake.HTTPException as e:
+            await inter.response.send_message(f"HTTPError: {e}")
 
     # make and save message-image
     def _create_msgimg(self, avatar: Image, content: str):

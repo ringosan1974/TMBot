@@ -14,6 +14,9 @@ class Omikuji(commands.Cog):
 
     @commands.slash_command()
     async def omikuji(self, inter):
-        fortune = random.choice(self.fortunes)
-        lucky_thing = random.choice(self.lucky_things)
-        await inter.response.send_message(f"あなたは{fortune}です！\nラッキーなものは{lucky_thing}です！")
+        try:
+            fortune = random.choice(self.fortunes)
+            lucky_thing = random.choice(self.lucky_things)
+            await inter.response.send_message(f"あなたは{fortune}です！\nラッキーなものは{lucky_thing}です！")
+        except disnake.HTTPException as e:
+            await inter.response.send_message(f"HTTPError: {e}")
